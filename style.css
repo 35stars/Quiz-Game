@@ -7,12 +7,12 @@
 
 body{
     background-color: rgb(41, 47, 63);
-    height: 100vh;
     display: grid;
     place-content: center;
 }
 
 .container{
+    margin-top: 3rem;
     min-width: 360px;
     max-width: 60vw;
     display: flex;
@@ -20,31 +20,35 @@ body{
     align-items: center;
 }
 
-.header-text{
-    margin-top: 10rem;
+.wrapper{
+    padding: .2rem;
+    margin: 2rem 0 0;
+    min-width: 360px;
+    width: 100%;
+    color: aliceblue;
+    text-transform: capitalize;
     font-size: 1.2rem;
     display: flex;
     justify-content: space-between;
-    color: aliceblue;
-    padding: .2rem;
-    text-transform: capitalize;
 }
 
-.wrapper{
+.results-div{
     display: flex;
-    justify-content: space-between;
+    width: 100%;
 }
 
-.show-answers-div li{
-    
+.show-answers-div li, .your-answers-div li{
     border-bottom: 1px solid gray ;
     padding: .5rem;
     list-style-position: inside;
 }
 
-.show-answers-div{    
+
+
+.show-answers-div, .your-answers-div{    
     background-color: rgb(169, 209, 128);
-    width: 49%;
+    width: 50%;
+    margin: .07rem;
 }
 
 
@@ -59,6 +63,11 @@ h3{
 #root{
     padding: .3rem;
     margin: auto;
+}
+
+
+.red-color{
+    color: red;
 }
 
 .answer{
@@ -118,13 +127,6 @@ article#question{
     font-size: 1.3rem;
     letter-spacing: .15ch;
     width: 100%
-}
-
-.results-div{
-    padding: .3rem;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
 }
 
 .result::before{

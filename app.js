@@ -40,14 +40,6 @@ const questions = [
         answer: 'All of the above'           
     },
     {
-        question: `What will be the output of the following code snippet?`,
-        a: 'Compilation error',
-        b: 14,
-        c: 'Runtime error',
-        d: 59,
-        answer: 59        
-    },
-    {
         question: `How can a datatype be declared to be a constant type?`,
         a: 'const',
         b: 'var',
@@ -59,11 +51,12 @@ const questions = [
 ]
 
 
+let container = document.querySelector('.container')
 
 let rootDiv = document.getElementById('root')    
 
-let scoreEl = document.querySelector('.score')
-let resultEl = document.querySelector('.result')
+let innerScore = document.querySelector('.score')
+let innerResult = document.querySelector('.result')
 
 let resultDiv = document.getElementById('score-and-result-div')
 
@@ -76,12 +69,11 @@ let results = document.createElement('div')
 let restartBtn = document.createElement('button')
     restartBtn.className = 'restart'
     restartBtn.textContent = 'Restart'
-    
 
 let index = 0    
 let score = 0   
 
-const arr = []  
+const myAnswers = []  
 
 showQtn(questions)
 function showQtn(questions){
@@ -91,185 +83,162 @@ function showQtn(questions){
         <article id="question">
             <h2 id="title">${qtn.question}</h2>
             <p class="option">
-                <span id="a"> &nbsp${qtn.a}  
-                </span>
+                <span id="a"> &nbsp ${qtn.a}</span>
             </p>
             <p class="option">
-                <span id="b"> &nbsp${qtn.b}  
-                </span>
+                <span id="b"> &nbsp ${qtn.b}</span>
             </p>
             <p class="option">
-                <span id="c"> &nbsp${qtn.c}
-                </span>
+                <span id="c"> &nbsp ${qtn.c}</span>
             </p>
             <p class="option">
-                <span id="d"> &nbsp${qtn.d}
-                </span>
+                <span id="d"> &nbsp ${qtn.d}</span>
             </p>
         </article>
         `
     }) 
     rootDiv.innerHTML = result[index]
-
+    
     rootDiv.querySelectorAll('.option').forEach(function(option){
-        option.addEventListener('click', clickEvent) 
-        
+        option.addEventListener('click', clickEvent)   
     })
 }
+
+
+function clickEvent(){
+        
+    rootDiv.insertAdjacentElement("beforebegin", parEl)   
+    
+    myAnswers.push(this.innerHTML)
+
+    if(this.innerText.match(questions[index].answer))correctAns()
+    else wrongAns()
+}
+
+
+
 
 
 function nextQuestion(){
 
     if(index < questions.length - 1){ 
         ++index
-
         showQtn(questions)
     } else if(index == questions.length -1 && score == questions.length){
-        resultEl.textContent = ` PERFECT!`
-        let sound = new Audio('winfantasia-6912.mp3').play()
+        innerResult.textContent = ` PERFECT!`
+        new Audio('winfantasia-6912.mp3').play()
         displayResults() 
-    } else if(index == questions.length -1 && scoreEl.textContent >=3){
-        let sound = new Audio('winfantasia-6912.mp3').play()
-        resultEl.textContent = ` PASSED!`
+    } else if(index == questions.length -1 && innerScore.textContent >=3){
+        new Audio('winfantasia-6912.mp3').play()
+        innerResult.textContent = ` PASSED!`
 
         displayResults()
     } else {
         displayResults()
-        resultEl.textContent = ` FAILED`
-
+        innerResult.textContent = ` FAILED`
     }
 }
 
 
-
-function clickEvent(){
-        
-    rootDiv.insertAdjacentElement("beforebegin", parEl)  
-    
-    arr.push(this.innerHTML)
-    
-    if((this.textContent).match(questions[index].answer)){
-                           
-        correctAns(this)
-            
-    } else {
-        wrongAns(this)
-    }       
-    
-}
-
-
-function displayResults(){
-    
-    (function removeClickEvent(){
+function displayResults(){   
     rootDiv.querySelectorAll('.option').forEach(option=>{
         option.removeEventListener('click', clickEvent)
     })
-    })()
 
-    parEl.insertAdjacentElement("beforebegin",results)
+    let correctAnswers = document.createElement('ol')
+    correctAnswers.className = 'show-answers-div'
+
+    let yourAnswers = document.createElement('ol')
+    yourAnswers.className = 'your-answers-div'
+
+    let div = document.createElement('div')
+    div.className = 'wrapper'
+
+    let correctAns = document.createElement('span')
+    correctAns.textContent = 'Correct Answers'
+
+    let yourAns = document.createElement('span')
+    yourAns.textContent = 'Your Answers'
+
+    for(let answer of myAnswers){
+        yourAnswers.innerHTML += `<li>${answer}</li>`
+        results.appendChild(yourAnswers)
+    }
     
-    results.innerHTML = `
-        <div class='header-text'>
-            <span> correct answers </span>
-            <span> your answers </span>    
-        </div>
+    for(let li of yourAnswers.children){
+        for(let index of questions){
+            if(li.firstElementChild.textContent.match(index.answer)){
+                li.firstElementChild.style.color='blue'
+                li.classList.add('list')
+            } else {
+                li.firstElementChild.classList.add('red-color')
+            }
+        }
+    }
 
-        <div class='wrapper'>
-            <ol class='show-answers-div'>
-                <li class='correct'> 
-                    ${questions[0].answer}
-                </li>
-                <li class='correct'> 
-                    ${questions[1].answer}
-                </li>
-                <li class='correct'> 
-                    ${questions[2].answer}
-                </li>
-                <li class='correct'> 
-                    ${questions[3].answer}
-                </li>
-                <li class='correct'> 
-                    ${questions[4].answer}
-                </li>
-                <li class='correct'> 
-                    ${questions[5].answer}
-                </li>
-                <li class='correct'> 
-                    ${questions[6].answer}
-                </li>
-            </ol>
+    for(let index of questions){
+        correctAnswers.innerHTML += 
+        `<li>${index.answer}</li>`
 
-            <ol class='show-answers-div'>
-                <li> 
-                    ${arr[0]}
-                </li>
-                <li> 
-                    ${arr[1]}
-                </li>
-                <li> 
-                    ${arr[2]}
-                </li>
-                <li> 
-                    ${arr[3]}
-                </li>
-                <li> 
-                    ${arr[4]}
-                </li>
-                <li> 
-                    ${arr[5]}
-                </li>
-                <li> 
-                    ${arr[arr.length-1]}
-                </li>
-            </ol>
-        </div>
-    `
-    resultDiv.insertAdjacentElement("afterend",restartBtn)            
+        results.appendChild(correctAnswers)
+    }
+
+    div.append(yourAns, correctAns)
+
+    container.prepend(div)
+
+    div.insertAdjacentElement("afterend",results)
+    
+    resultDiv.insertAdjacentElement("afterend",restartBtn)  
+    
 }
 
 
 
 restartBtn.onclick=function(){
-    this.remove()
-    results.remove()
-    let sound = new Audio('interface-1-126517.mp3').play()
 
-    resultEl.textContent = ''
+    myAnswers.splice(0)
+
+    this.remove()
+
+    container.querySelector('.wrapper').remove()
+    results.querySelector('.show-answers-div').remove()
+    results.querySelector('.your-answers-div').remove()
+
+    new Audio('interface-1-126517.mp3').play()
+    
     index = 0
     score = 0
-    scoreEl.textContent = ` ${score}`
+
+    innerResult.textContent = ''
+    innerScore.textContent = ` ${score}`
+    
     showQtn(questions)  
-
-    arr.splice(0)
 }
 
 
 
-function correctAns(e){
-
-    scoreEl.textContent = ` ${++score}`
-
-    nextQuestion()  
-
-    let sound = new Audio('good-6081.mp3').play()
-
-    setTimeout(() => {
-        parEl.textContent = ''
-    }, 1000, parEl.textContent = 'Correct!')    
+function correctAns(){
+    innerScore.textContent = ` ${++score}`
     
-    
-}
-
-
-
-function wrongAns(e){
-
-    let sound = new Audio('error-2-36058.mp3').play()
-
-    setTimeout(() => {
-        parEl.textContent = ''
-    }, 1000, parEl.textContent = 'Wrong.') 
-     
     nextQuestion()
+
+    new Audio('good-6081.mp3').play()
+
+    setTimeout(() => {
+        parEl.textContent = ''
+    }, 900, parEl.textContent = 'Correct!')       
+}
+
+
+
+function wrongAns(){
+
+    nextQuestion()
+
+    new Audio('error-2-36058.mp3').play()
+
+    setTimeout(() => {
+        parEl.textContent = ''
+    }, 900, parEl.textContent = 'Wrong.')
 }
